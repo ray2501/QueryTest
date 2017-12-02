@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Query Test</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+</head>
+<body>
+<h1 align="center">Query Test</h1>
+<div id="app">
+<div align="center">
+<form class="pure-form">
+    <fieldset>
+    <label for="email">Query String</label>
+    <input type="text" class="pure-input-1-2" v-model="sqlstring" placeholder="">
+    <button type="submit" class="pure-button pure-button-primary" v-on:click.prevent="posttoserver">Submit</button>
+    </fieldset>
+</form>
+</div>
+<table class="pure-table" width="100%">
+<thead>
+    <tr>
+    <td v-for="col in column">{{ col }} </td>
+    </tr>
+</thead>
+<tbody>
+    <tr v-for="rowitem in row">
+    <td v-for="item in rowitem">{{ item }} </td>
+    </tr>
+</tbody>
+</table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    Object.defineProperty(Vue.prototype, '$http', { value: axios });
+
+    var app = new Vue({
+        el:'#app',
+        data:{
+            sqlstring: '',
+            column: '',
+            row: ''
+        },
+        methods: {
+           posttoserver: function () {
+             formdata = new FormData();
+             formdata.append('sqlstring', app.sqlstring);
+
+             this.$http.post('sql.adp', formdata,
+             {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+             .then((response) => {
+               app.column = response.data["column"];
+               app.row = response.data["row"];
+             })
+             .catch((error) => {
+               alert(error);
+             });
+          }
+       }
+    });
+</script>
+</body>
+</html>
