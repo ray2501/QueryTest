@@ -19,7 +19,7 @@
      set param_rowitem [list]
      lappend param_rowitem "array"
      foreach row $result {
-        lappend param_rowitem "string \"[ns_quotehtml $row]\""
+        lappend param_rowitem "string \"$row\""
      }
 
      lappend param_rowitems $param_rowitem
