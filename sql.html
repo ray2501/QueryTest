@@ -45,7 +45,7 @@
         },
         methods: {
            posttoserver: function () {
-             formdata = new FormData();
+             var formdata = new FormData();
              formdata.append('sqlstring', app.sqlstring);
 
              this.$http.post('sql.adp', formdata,
