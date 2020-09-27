@@ -13,7 +13,7 @@
     <fieldset>
     <label for="text">Query String</label>
     <input type="text" class="pure-input-1-2" v-model="sqlstring" placeholder="">
-    <button type="submit" class="pure-button pure-button-primary" v-on:click.prevent="posttoserver">Submit</button>
+    <button type="submit" class="pure-button pure-button-primary" @click.prevent="posttoserver">Submit</button>
     </fieldset>
 </form>
 </div>
@@ -31,35 +31,34 @@
 </table>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/vue@next"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    Object.defineProperty(Vue.prototype, '$http', { value: axios });
-
-    var app = new Vue({
-        el:'#app',
-        data:{
-            sqlstring: '',
-            column: '',
-            row: ''
+    Vue.createApp({
+        data() {
+            return {
+                sqlstring: '',
+                column: '',
+                row: ''
+            }
         },
         methods: {
-           posttoserver: function () {
+           posttoserver (event) {
              var formdata = new FormData();
-             formdata.append('sqlstring', app.sqlstring);
+             formdata.append('sqlstring', this.sqlstring);
 
-             this.$http.post('sql.adp', formdata,
+             axios.post('sql.adp', formdata,
              {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
              .then((response) => {
-               app.column = response.data["column"];
-               app.row = response.data["row"];
+               this.column = response.data["column"];
+               this.row = response.data["row"];
              })
              .catch((error) => {
                alert(error);
              });
           }
        }
-    });
+    }).mount('#app')
 </script>
 </body>
 </html>
